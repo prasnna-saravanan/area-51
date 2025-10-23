@@ -26,7 +26,7 @@ class ZendeskClient:
         if conditions:
             query += " WHERE " + " AND ".join(conditions)
 
-        return self.server.query(query).fetch()
+        return self.server.query(query).fetch().to_dict(orient="records")
 
     
     def query_tickets(self, query: dict = None) -> List[ZendeskTicket]:
