@@ -30,7 +30,7 @@ class ZendeskClient:
 
     
     def query_tickets(self, query: dict = None) -> List[ZendeskTicket]:
-        table = self.server.databases.zendesk_datasource.tables.issues
+        table = self.server.databases.zendesk_datasource.tables.tickets
 
         df = table.filter(**query).fetch() if query else table.fetch()
     
