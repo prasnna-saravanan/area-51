@@ -1,0 +1,53 @@
+from dataclasses import dataclass
+from pydantic import BaseModel
+
+@dataclass
+class ZendeskTicket(BaseModel):
+    assignee_id: str
+    brand_id: str
+    collaborator_ids: str
+    created_at: str
+    custom_fields: str
+    description: str
+    due_at: str
+    external_id: str
+    fields: str
+    forum_topic_id: str
+    group_id: str
+    has_incidents: str
+    id: str
+    organization_id: str
+    priority: str
+    problem_id: str
+    raw_subject: str
+    recipient: str
+    requester_id: str
+    sharing_agreement_ids: str
+    status: str
+    subject: str
+    submitter_id: str
+    tags: str
+    type: str
+    updated_at: str
+    url: str
+    generated_timestamp: str
+    follower_ids: str
+    email_cc_ids: str
+    is_public: str
+    custom_status_id: str
+    followup_ids: str
+    ticket_form_id: str
+    allow_channelback: str
+    allow_attachments: str
+    from_messaging_channel: str
+    satisfaction_rating_assignee_id: str
+    satisfaction_rating_created_at: str
+    satisfaction_rating_group_id: str
+    satisfaction_rating_id: str
+    satisfaction_rating_requester_id: str
+    satisfaction_rating_score: str
+    satisfaction_rating_ticket_id: str
+    satisfaction_rating_updated_at: str
+    satisfaction_rating_url: str
+    via_channel: str
+    via_source_rel: str
