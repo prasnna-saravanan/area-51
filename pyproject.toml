@@ -11,6 +11,7 @@ dependencies = [
     "tenacity>=8.2.0",
     "mindsdb-sdk>=1.0.0",
     "python-dotenv>=1.0.0",
+    "fastmcp>=2.12.5",
 ]
 
 [project.optional-dependencies]
