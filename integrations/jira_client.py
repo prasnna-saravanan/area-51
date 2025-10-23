@@ -1,4 +1,5 @@
-from typing import Dict, List
+from typing import List
+
 import mindsdb_sdk
 
 from models.jira_issue import JiraIssue
@@ -9,7 +10,7 @@ class JiraClient:
 
     def __init__(self):
         self.server = mindsdb_sdk.connect()
-        self.jira_kb = self.server.knowledge_bases.get('jira_kb')
+        self.jira_kb = self.server.knowledge_bases.get("jira_kb")
 
     def search_tickets(self, content: str = None, filters: dict = None):
         query = "SELECT * FROM jira_kb"
@@ -27,13 +28,11 @@ class JiraClient:
 
         return self.server.query(query).fetch().to_dict(orient="records")
 
-    
     def query_tickets(self, query: dict = None) -> List[JiraIssue]:
         table = self.server.databases.jira_datasource.tables.issues
 
         df = table.filter(**query).fetch() if query else table.fetch()
-    
+
         records = df.to_dict(orient="records")
 
         return [JiraIssue(**record) for record in records]
-        

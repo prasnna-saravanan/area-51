@@ -28,12 +28,11 @@ class ZendeskClient:
 
         return self.server.query(query).fetch().to_dict(orient="records")
 
-    
     def query_tickets(self, query: dict = None) -> List[ZendeskTicket]:
         table = self.server.databases.zendesk_datasource.tables.zendesk_tickets
 
         df = table.filter(**query).fetch() if query else table.fetch()
-    
+
         records = df.to_dict(orient="records")
 
         return [ZendeskTicket(**record) for record in records]
