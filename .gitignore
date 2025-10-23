@@ -27,3 +27,5 @@ dist/
 build/
 *.egg-info/
 
+test.ipynb
+test (2).ipynb
