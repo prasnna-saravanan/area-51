@@ -31,4 +31,3 @@ class ConfluencePage(BaseModel):
     _links_tinyui: Optional[str] = None
 
     model_config = {"extra": "ignore"}
-

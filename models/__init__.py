@@ -3,4 +3,3 @@
 from .confluence_page import ConfluencePage
 
 __all__ = ["ConfluencePage"]
-

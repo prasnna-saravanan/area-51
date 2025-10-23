@@ -16,7 +16,9 @@ class ConfluenceClient:
         self.server = mindsdb_sdk.connect()
         self.search_tool = SemanticSearchTool(kb_name="confluence_kb")
 
-    def get_pages(self, space_key: str = "SOP", limit: int = 100, as_models: bool = False) -> List[Union[Dict, ConfluencePage]]:
+    def get_pages(
+        self, space_key: str = "SOP", limit: int = 100, as_models: bool = False
+    ) -> List[Union[Dict, ConfluencePage]]:
         """
         Get pages from Confluence via MindsDB.
 
@@ -34,19 +36,21 @@ class ConfluenceClient:
         LIMIT {limit}
         """
         results = self.server.query(query).fetch()
-        
+
         if as_models:
             return [ConfluencePage(**row) for row in results]
         return results
 
-    def get_page(self, page_id: str, as_model: bool = False) -> Union[Dict, ConfluencePage]:
+    def get_page(
+        self, page_id: str, as_model: bool = False
+    ) -> Union[Dict, ConfluencePage]:
         """Get a specific page by ID."""
         query = f"""
         SELECT * FROM confluence_datasource.pages
         WHERE id = '{page_id}'
         """
         results = self.server.query(query).fetch()
-        
+
         if results:
             result = results[0]
             return ConfluencePage(**result) if as_model else result
@@ -69,7 +73,9 @@ class ConfluenceClient:
         """
         return self.search_tool.search(content=content, filters=filters)
 
-    def query_pages(self, filters: Dict = None, as_models: bool = False) -> List[Union[Dict, ConfluencePage]]:
+    def query_pages(
+        self, filters: Dict = None, as_models: bool = False
+    ) -> List[Union[Dict, ConfluencePage]]:
         """
         Query Confluence pages from the datasource with filters.
 
@@ -83,7 +89,7 @@ class ConfluenceClient:
         results = self.search_tool.query_raw_data(
             datasource="confluence_datasource", table="pages", filters=filters
         )
-        
+
         if as_models:
             return [ConfluencePage(**row) for row in results]
         return results
@@ -94,7 +100,9 @@ class ConfluenceClient:
         self.server.query(query)
         print("✓ Refreshed Confluence datasource")
 
-    def get_recent_pages(self, days: int = 7, as_models: bool = False) -> List[Union[Dict, ConfluencePage]]:
+    def get_recent_pages(
+        self, days: int = 7, as_models: bool = False
+    ) -> List[Union[Dict, ConfluencePage]]:
         """Get recently updated pages."""
         query = f"""
         SELECT * FROM confluence_datasource.pages
@@ -102,7 +110,7 @@ class ConfluenceClient:
         ORDER BY version_createdAt DESC
         """
         results = self.server.query(query).fetch()
-        
+
         if as_models:
             return [ConfluencePage(**row) for row in results]
         return results
