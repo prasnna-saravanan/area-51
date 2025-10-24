@@ -1,8 +1,6 @@
 """Zendesk API client."""
 
 import mindsdb_sdk
-from typing import List
-from models.zendesk_ticket import ZendeskTicket
 
 
 class ZendeskClient:
@@ -28,11 +26,13 @@ class ZendeskClient:
 
         return self.server.query(query).fetch().to_dict(orient="records")
 
-    def query_tickets(self, query: dict = None) -> List[ZendeskTicket]:
-        table = self.server.databases.zendesk_datasource.tables.zendesk_tickets
+    # def query_tickets(self, query: dict = None) -> List[ZendeskTicket]:
+    def query_tickets(self, query: dict = None):
+        table = self.server.databases.zendesk_datasource.tables.tickets
 
         df = table.filter(**query).fetch() if query else table.fetch()
 
         records = df.to_dict(orient="records")
 
-        return [ZendeskTicket(**record) for record in records]
+        # return [ZendeskTicket(**record) for record in records]
+        return records

@@ -1,11 +1,11 @@
-from typing import List
+from typing import List, Optional
 
 from fastmcp import FastMCP
 
 from integrations import confluence_client, jira_client, zendesk_client
+from models.common import Filter
 from models.confluence_page import ConfluencePage
 from models.jira_issue import JiraIssue
-from models.zendesk_ticket import ZendeskTicket
 
 mcp = FastMCP(name="Support Agent Assistant", port=5000)
 jira_client = jira_client.JiraClient()
@@ -35,16 +35,19 @@ def fetch_releavant_zendesk_tickets(content: str, filters: dict = None):
 
 
 @mcp.tool
-def query_zendesk_tickets(query: dict) -> List[ZendeskTicket]:
+# def query_zendesk_tickets(query: dict) -> List[ZendeskTicket]:
+def query_zendesk_tickets(query: dict):
     """Fetches the Zendesk tickets based on the deterministic conditions"""
     res = zendesk_client.query_tickets(query=query)
     return res
 
 
 @mcp.tool
-def fetch_releavant_confluence_pages(content: str, filters: dict = None):
+def fetch_releavant_confluence_pages(
+    content: str, filters: Optional[Filter] = Filter(filters={})
+):
     """Given a content, fetches the relevant Confluence page chunks ranked based on relevance. You can use the relevant IDs after fetching to get the full page details if needed."""
-    res = confluence_client.search_pages(content=content, filters=filters)
+    res = confluence_client.search_pages(content=content, filters=filters.filters)
     return res
 
 

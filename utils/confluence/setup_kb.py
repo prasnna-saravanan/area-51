@@ -2,6 +2,7 @@
 
 import argparse
 import os
+import time
 from typing import Dict, List
 
 import mindsdb_sdk
@@ -22,9 +23,9 @@ def setup_pgvector_datasource() -> None:
     # Get credentials from environment
     host = os.getenv("PGVECTOR_HOST", "host.docker.internal")
     port = os.getenv("PGVECTOR_PORT", "5432")
-    database = os.getenv("PGVECTOR_DATABASE", "postgres")
-    user = os.getenv("PGVECTOR_USER", "postgres")
-    password = os.getenv("PGVECTOR_PASSWORD", "admin")
+    database = os.getenv("PGVECTOR_DATABASE", "mindsdb")
+    user = os.getenv("PGVECTOR_USER", "mindsdb")
+    password = os.getenv("PGVECTOR_PASSWORD", "mindsdb")
 
     # Drop existing datasource if needed
     try:
@@ -105,6 +106,7 @@ def create_confluence_kb(
             "base_url": azure_config.get("endpoint"),
             "api_version": azure_config.get("api_version", "2024-02-01"),
             "deployment": azure_config.get("deployment", "text-embedding-3-large"),
+            "rate_limit": 20,
         }
         reranking_model = {
             "provider": "azure_openai",
@@ -113,6 +115,7 @@ def create_confluence_kb(
             "base_url": azure_config.get("endpoint"),
             "api_version": azure_config.get("api_version", "2024-02-01"),
             "deployment": azure_config.get("inference_deployment", "gpt-4.1"),
+            "rate_limit": 20,
         }
     else:
         embedding_model = {
@@ -156,14 +159,24 @@ def create_confluence_kb(
 
 def insert_confluence_data() -> None:
     """Insert Confluence data into knowledge base using SDK."""
+
+    insert_confluence_data_throttled()
+
+
+def insert_confluence_data_throttled(batch_size=5, delay=1):
     server = mindsdb_sdk.connect()
 
-    # Get the KB
-    confluence_kb = server.knowledge_bases.get("confluence_kb")
+    rows = server.query("SELECT * FROM confluence_datasource.pages").fetch()
+    kb = server.knowledge_bases.get("confluence_kb")
 
-    # Use insert_query method with SDK
-    confluence_kb.insert_query(server.databases.confluence_datasource.tables.pages)
-    print("✓ Inserted data into confluence_kb")
+    for i in range(0, len(rows), batch_size):
+        try:
+            batch = rows[i : i + batch_size]
+            kb.insert(batch)
+            print(f"Inserted {i + len(batch)} / {len(rows)}")
+            time.sleep(delay)
+        except Exception as e:
+            print(f"Error inserting batch {i}: {e}")
 
 
 def refresh_and_update() -> None:

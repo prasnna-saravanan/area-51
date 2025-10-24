@@ -4,8 +4,8 @@ from typing import Dict, List, Union
 
 import mindsdb_sdk
 
-from tools.search import SemanticSearchTool
 from models.confluence_page import ConfluencePage
+from tools.search import SemanticSearchTool
 
 
 class ConfluenceClient:
@@ -37,9 +37,20 @@ class ConfluenceClient:
         """
         results = self.server.query(query).fetch()
 
-        if as_models:
-            return [ConfluencePage(**row) for row in results]
-        return results
+        if results is not None and len(results) > 0:
+            if as_models:
+                results_list = (
+                    results.to_dict(orient="records")
+                    if hasattr(results, "to_dict")
+                    else results
+                )
+                return [ConfluencePage(**row) for row in results_list]
+            return (
+                results.to_dict(orient="records")
+                if hasattr(results, "to_dict")
+                else results
+            )
+        return []
 
     def get_page(
         self, page_id: str, as_model: bool = False
@@ -51,8 +62,13 @@ class ConfluenceClient:
         """
         results = self.server.query(query).fetch()
 
-        if results:
-            result = results[0]
+        if results is not None and len(results) > 0:
+            if hasattr(results, "iloc"):
+                result = results.iloc[0].to_dict()
+            elif hasattr(results, "to_dict"):
+                result = results.to_dict(orient="records")[0]
+            else:
+                result = results[0]
             return ConfluencePage(**result) if as_model else result
         return {} if not as_model else None
 

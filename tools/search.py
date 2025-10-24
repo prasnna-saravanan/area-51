@@ -48,7 +48,14 @@ class SemanticSearchTool:
         results = self.server.query(query).fetch()
 
         # Return top_k results
-        return results[:top_k] if results else []
+        if results is not None and len(results) > 0:
+            results_list = (
+                results.to_dict(orient="records")
+                if hasattr(results, "to_dict")
+                else results
+            )
+            return results_list[:top_k]
+        return []
 
     def search_by_meta(self, filters: Dict, top_k: int = 5) -> List[Dict]:
         """
@@ -77,7 +84,9 @@ class SemanticSearchTool:
         Returns:
             List of matching records
         """
-        table_obj = self.server.databases[datasource].tables[table]
+        # Access databases using dot notation
+        db_obj = getattr(self.server.databases, datasource)
+        table_obj = getattr(db_obj.tables, table)
 
         if filters:
             df = table_obj.filter(**filters).fetch()

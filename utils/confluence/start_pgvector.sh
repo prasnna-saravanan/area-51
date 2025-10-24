@@ -4,10 +4,10 @@
 echo "Starting pgvector..."
 
 docker run -d \
-  --name mindsdb-pgvector \
-  -e POSTGRES_PASSWORD=admin \
-  -e POSTGRES_USER=postgres \
-  -e POSTGRES_DB=postgres \
+  --name mindsdb \
+  -e POSTGRES_PASSWORD=mindsdb \
+  -e POSTGRES_USER=mindsdb \
+  -e POSTGRES_DB=mindsdb \
   -p 5432:5432 \
   pgvector/pgvector:pg16
 

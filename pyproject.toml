@@ -12,6 +12,7 @@ dependencies = [
     "mindsdb-sdk>=1.0.0",
     "python-dotenv>=1.0.0",
     "fastmcp>=2.12.5",
+    "ipykernel>=7.0.1",
 ]
 
 [project.optional-dependencies]
