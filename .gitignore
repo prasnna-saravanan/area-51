@@ -30,4 +30,4 @@ build/
 test.ipynb
 test (2).ipynb
 
-.lock
+uv.lock
