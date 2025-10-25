@@ -193,12 +193,12 @@ def create_zendesk_kb(api_key: str, azure_config: dict = None, use_pgvector: boo
     server.knowledge_bases.create(**kb_params)
 
 
-def insert_kb_data(kb_name: str, batch_size=5, delay=1) -> None:
+def insert_kb_data(kb_name: str, source_datasource = None, source_table = None, batch_size=5, delay=1) -> None:
     server = mindsdb_sdk.connect()
     kb = server.knowledge_bases.get(kb_name)
 
     # Fetch rows from datasource
-    rows = server.query(f"SELECT * FROM {kb_name.replace('_kb','_datasource')}.{kb_name.split('_')[0]}").fetch()
+    rows = server.query(f"SELECT * FROM {source_datasource}.{source_table}").fetch()
 
     for i in range(0, len(rows), batch_size):
         try:

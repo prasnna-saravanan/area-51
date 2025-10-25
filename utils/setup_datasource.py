@@ -14,15 +14,16 @@ if os.path.exists(root_env):
 
 def drop_all_datasources() -> None:
     server = mindsdb_sdk.connect()
-    for db in server.list_databases:
-        server.databases.drop(db)
+    for db in server.databases.list():
+        if db.name in ["pgvector_datasource"] :
+            server.databases.drop(db.name)
 
 def setup_pgvector_datasource() -> None:
     """Create pgvector datasource in MindsDB."""
     server = mindsdb_sdk.connect()
 
     # Get credentials from environment
-    host = os.getenv("PGVECTOR_HOST", "host.docker.internal")
+    host = os.getenv("PGVECTOR_HOST", "localhost")
     port = os.getenv("PGVECTOR_PORT", "5432")
     database = os.getenv("PGVECTOR_DATABASE", "mindsdb")
     user = os.getenv("PGVECTOR_USER", "mindsdb")
@@ -90,7 +91,7 @@ def setup_jira_datasource() -> None:
 
     api_base = os.getenv("JIRA_API_BASE")
     username = os.getenv("JIRA_USERNAME")
-    password = os.getenv("JIRA_PASSWORD")
+    password = os.getenv("JIRA_API_TOKEN")
 
     if not all([api_base, username, password]):
         raise ValueError(
@@ -107,9 +108,9 @@ def setup_jira_datasource() -> None:
         name="jira_datasource",
         engine="jira",
         connection_args={
-            "api_base": api_base,
+            "url": api_base,
             "username": username,
-            "password": password,
+            "api_token": password,
         },
     )
     print("✓ Created jira_datasource")
@@ -119,9 +120,9 @@ def setup_zendesk_datasource() -> None:
     """Create Zendesk datasource in MindsDB."""
     server = mindsdb_sdk.connect()
 
-    api_base = os.getenv("ZENDESK_API_BASE")
-    username = os.getenv("ZENDESK_USERNAME")
-    password = os.getenv("ZENDESK_PASSWORD")
+    api_base = os.getenv("ZENDESK_SUBDOMAIN")
+    username = os.getenv("ZENDESK_EMAIL")
+    password = os.getenv("ZENDESK_API_TOKEN")
 
     if not all([api_base, username, password]):
         raise ValueError(
@@ -138,9 +139,9 @@ def setup_zendesk_datasource() -> None:
         name="zendesk_datasource",
         engine="zendesk",
         connection_args={
-            "api_base": api_base,
-            "username": username,
-            "password": password,
+            "sub_domain": api_base,
+            "email": username,
+            "api_key": password,
         },
     )
     print("✓ Created zendesk_datasource")

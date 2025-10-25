@@ -1,15 +1,13 @@
 import argparse
 from dotenv import load_dotenv
-import os 
+import os
 
 from utils import setup_datasource, setup_kb
 
 # Load environment variables from .env files
 # Try root .env first, then fall back to utils/confluence/.env
-root_env = os.path.join(os.path.dirname(__file__), "..", "..", ".env")
-
-if os.path.exists(root_env):
-    load_dotenv(root_env)
+if os.path.exists(".env"):
+    load_dotenv(".env")
 
 
 def main():
@@ -46,9 +44,9 @@ def main():
         print("Setting up Confluence KB...")
         print("=" * 60)
 
-        setup_datasource.drop_all_datasources()
         setup_kb.drop_all_kbs()
-        
+        setup_datasource.drop_all_datasources()
+
         # Setup pgvector datasource
         setup_datasource.setup_pgvector_datasource()
 
@@ -63,9 +61,9 @@ def main():
         setup_kb.create_jira_kb(api_key, azure_config, use_pgvector=True)
 
         # Insert data
-        setup_kb.insert_confluence_data("confluence_kb")
-        setup_kb.insert_kb_data("jira_kb")
-        setup_kb.insert_kb_data("zendesk_kb")
+        setup_kb.insert_kb_data("confluence_kb", "confluence_datasource", "pages")
+        setup_kb.insert_kb_data("jira_kb", "jira_datasource", "issues")
+        setup_kb.insert_kb_data("zendesk_kb", "zendesk_datasource", "tickets")
 
         # Example search
         results = setup_kb.search_confluence_kb("authentication")
