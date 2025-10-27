@@ -530,10 +530,6 @@ area51/
 └── USECASE.md               # Use case scenarios
 ```
 
-## License
-
-MIT License. See LICENSE file for details.
-
 ## Contributing
 
 This project was built for Hacktoberfest 2025. Contributions welcome.
