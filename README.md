@@ -4,6 +4,15 @@ A production-ready AI-powered search system that unifies Zendesk tickets, Jira i
 
 > **Quick Start**: See [QUICKSTART.md](QUICKSTART.md) for immediate setup instructions.
 
+## Demo
+
+**[▶️ Watch the Demo Video](https://drive.google.com/file/d/1EYNMn29d0b2iaXA4EZxH6zRS78ErA1fF/view)**
+
+## Featured
+
+- **Blog Post**: [Unifying Enterprise Knowledge Search with MindsDB](https://dev.to/prasanna_fdb846e8c3a99074/unifying-enterprise-knowledge-search-with-mindsdb-2cho)
+- **LinkedIn**: [Project Announcement](https://www.linkedin.com/posts/prasanna-saravanan_we-came-acrossmindsdb-and-it-instantly-activity-7388639910221688832-3TKx?utm_source=share&utm_medium=member_desktop&rcm=ACoAADNOdxgBTYgSHinrZ9jyC5mE8zRGfUl2RJ0)
+
 ## Problem Statement
 
 Modern enterprises battle knowledge fragmentation every day. Critical information is scattered across three distinct platforms:
