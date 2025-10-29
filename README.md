@@ -6,7 +6,7 @@ A production-ready AI-powered search system that unifies Zendesk tickets, Jira i
 
 ## Demo
 
-**[▶️ Watch the Demo Video](https://drive.google.com/file/d/1EYNMn29d0b2iaXA4EZxH6zRS78ErA1fF/view)**
+**[▶ Watch the Demo Video](https://drive.google.com/file/d/1EYNMn29d0b2iaXA4EZxH6zRS78ErA1fF/view)**
 
 ## Featured
 
